@@ -2,7 +2,7 @@
 
 [![CircleCI](https://circleci.com/gh/nasa/cumulus-distribution-api.svg?style=svg)](https://circleci.com/gh/nasa/cumulus-distribution-api)
 
-Cumulus API documentaion: https://nasa.github.io/cumulus-distribution-api
+Cumulus Distribution API documentaion: https://nasa.github.io/cumulus-distribution-api
 
 ### Installation
 
