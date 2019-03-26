@@ -29,7 +29,7 @@ https://example.com/s3credentials
 
 ### Command line credentials request
 
-In order to script the request of a token you must provide an `accessToken` cookie in your curl request. This is how the distribution api determines if you are authenticated with Earthdata Login.  If no cookie is provided the authentication workflow is begun.  Here is a sample script to get credentials from the command line.
+In order to script the request for credentials you must provide an `accessToken` cookie in your curl request. This is how the distribution api determines if you are authenticated with Earthdata Login.  If no cookie is provided the authentication workflow is begun.  Here is a sample script to get credentials from the command line.
 
 #### Sample script to recieve credentials.
 
