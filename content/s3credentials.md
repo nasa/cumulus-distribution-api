@@ -6,7 +6,7 @@ The Cumulus API can provide temporary credentials that provide read-only, same-r
 For NGAP (NASA-compliant General Application Platform) deployments, the `s3credentials` endpoint is configured to request temporary credentials from an NGAP lambda function `gsfc-ngap-sh-s3-sts-get-keys`.
 
 
-GET requests with a valid cookie to the endpoint return a credentials object that can be used to make direct S3 requests.  The easiest way to get a set of credentials is to visit the endpoint in a browser to handle the authorization and redirects.
+GET requests with a valid cookie to the endpoint return a credentials object that can be used to make direct S3 requests.  The easiest way to get a set of credentials is to visit the endpoint in a browser to handle the authentication and redirects.
 
 ```endpoint
 GET /s3credentials
