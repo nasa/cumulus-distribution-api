@@ -17,5 +17,5 @@ module.exports =
   '# Data Access\n' +
   fs.readFileSync('./content/distribution.md', 'utf8') + '\n' +
 
-  '# s3 Access\n' +
+  '# S3 Access\n' +
   fs.readFileSync('./content/s3credentials.md', 'utf8') + '\n'
