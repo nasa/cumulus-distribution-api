@@ -63,6 +63,165 @@ CREDS=$(curl -i -b ${COOKIEJAR} -s $CREDENTIALS_URL)
 echo $CREDS
 ```
 
+
+```python
+import argparse
+import base64
+import boto3
+import json
+import requests
+
+def retrieve_credentials(event):
+    """Makes the Oauth calls to authenticate with EDS and return a set of s3
+    same-region, read-only credntials.
+    """
+    login_resp = requests.get(
+        event['s3_endpoint'], allow_redirects=False
+    )
+    login_resp.raise_for_status()
+
+    auth = f"{event['edl_username']}:{event['edl_password']}"
+    encoded_auth  = base64.b64encode(auth.encode('ascii'))
+
+    auth_redirect = requests.post(
+        login_resp.headers['location'],
+        data = {"credentials": encoded_auth},
+        headers= { "Origin": event['s3_endpoint'] },
+        allow_redirects=False
+    )
+    auth_redirect.raise_for_status()
+
+    final = requests.get(auth_redirect.headers['location'], allow_redirects=False)
+
+    results = requests.get(event['s3_endpoint'], cookies={'accessToken': final.cookies['accessToken']})
+    results.raise_for_status()
+
+    return json.loads(results.content)
+
+
+
+def lambda_handler(event, context):
+    """Sample lambda handler to show how to use in AWS environment"""
+
+    creds = retrieve_credentials(event)
+    bucket = event['bucket_name']
+
+    # create client with temporary credentials
+    client = boto3.client(
+        's3',
+        aws_access_key_id=creds["accessKeyId"],
+        aws_secret_access_key=creds["secretAccessKey"],
+        aws_session_token=creds["sessionToken"]
+    )
+    # use the client for readonly access.
+    response = client.list_objects_v2(Bucket=bucket, Prefix="")
+
+    return {
+        'statusCode': 200,
+        'body': json.dumps([r["Key"] for r in response['Contents']])
+    }
+
+```
+
+```javascript
+const { S3 } = require('aws-sdk');
+const { promisify } = require('util');
+const { Cookie, CookieJar } = require('tough-cookie');
+const base64 = require('base-64');
+const got = require('got');
+
+/**
+ * Makes the Oauth calls to authenticate with EDL and returns a set of s3
+ * same-region, read-only credentials
+ *
+ * @param {Object} authInfo
+ * @param {string} authInfo.edlUsername - Earthdata Login username
+ * @param {string} authInfo.edlPassword - Earthdata Login password
+ * @param {string} authInfo.s3Endpoint - s3credentials endpoint url
+ *
+ * @returns {Object} ngap's AWS sts credentials object
+ */
+async function retrieveCredentials(authInfo) {
+  const cookieJar = new CookieJar();
+  const setCookie = promisify(cookieJar.setCookie.bind(cookieJar));
+
+  // Call to the s3credentials endpoint
+  const response = await got.get(authInfo.s3Endpoint, {
+    followRedirect: false,
+  });
+
+  // grant access via Post to EDL with your base64 encoded credentials
+  const authRedirect = await got.post(response.headers.location, {
+    form: { credentials: base64.encode(`${authInfo.edlUsername}:${authInfo.edlPassword}`) },
+    headers: { Origin: authInfo.s3Endpoint },
+    followRedirect: false,
+  });
+
+  // follow redirect with code to get access token
+  const withAccessToken = await got.get(authRedirect.headers.location, {
+    followRedirect: false,
+  });
+
+  // set accessToken into cookie jar.
+  const cookies = withAccessToken.headers['set-cookie'].map(Cookie.parse);
+  await Promise.all([cookies.map((c) => setCookie(c, authInfo.s3Endpoint))]);
+
+  // authorized call to the s3credential endpoint
+  const results = await got(authInfo.s3Endpoint, {
+    cookieJar,
+    responseType: 'json',
+  });
+  return results.body;
+}
+
+/**
+ * Sample routine to show how sts credentials can be used
+ *
+ * @param {Object} credentials - sts credential object returned from s3credential endpoint
+ * @param {any} bucketName - Name of bucket to list objects from.
+ * @returns {Array<string>} - List of Keys in bucket.
+ */
+async function listObjects(credentials, bucketName) {
+  // Create the S3 service using your temporary credentials.
+  const s3 = new S3({ credentials });
+
+  // Get a list of object Keys from the bucket
+  try {
+    const returnValue = await s3.listObjectsV2({ Bucket: bucketName, Prefix: '' }).promise();
+    return returnValue.Contents.map((obj) => obj.Key);
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+async function handler(event) {
+  const authInfo = {
+    s3Endpoint: process.env.S3_CREDENTIAL_ENDPOINT,
+    edlUsername: process.env.EARTHDATA_USERNAME,
+    edlPassword: process.env.EARTHDATA_PASSWORD,
+    ...event,
+  };
+  const { bucketName } = { bucketName: 'pass-bucket-name-in-event', ...event };
+
+  let credentials;
+  try {
+    credentials = await retrieveCredentials(authInfo);
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+
+  const foundKeys = await listObjects(credentials, bucketName);
+  return foundKeys;
+}
+
+exports.handler = handler;
+
+
+```
+
+
 ### Non-NGAP deployments
 
 For non-NGAP deployments that wish to provide temporary credentials, you must provide the name of a lambda available to your stack either by overriding the default `sts_credentials_lambda` in your Cumulus deployment configuration or by setting the environment variable STSCredentialsLambda on your API.  Your lambda function must take an payload object as described below and return [AWS.Credentials](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/Credentials.html) appropriate to your use case probably via the [AWS Security Token Service](https://docs.aws.amazon.com/STS/latest/APIReference/Welcome.html).
