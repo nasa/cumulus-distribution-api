@@ -3,7 +3,7 @@
 The Cumulus API can provide temporary credentials that provide read-only, same-region, direct access to S3 objects.
 
 
-For Cumulus deployments in NGAP (NASA-compliant General Application Platform), the `/s3credentials` endpoint can be configured to request temporary credentials from the NGAP lambda function: `gsfc-ngap-sh-s3-sts-get-keys`.  Additionally, these deployments may be configured to limit a users access only to bucket/keypaths that the user's CMR ACLs allow.  Check with your Cumulus deployer to discover what types of credentials are dispensed by this endpoint.
+For Cumulus deployments in NGAP[^ngap] , the `/s3credentials` endpoint can be configured to request temporary credentials from the NGAP lambda function: `gsfc-ngap-sh-s3-sts-get-keys`.  Additionally, these deployments may be configured to limit the scope of the dispensed credentials only to bucket/keypaths that match the user's [CMR](https://cmr.earthdata.nasa.gov/search)[^cmr] ACL[^acl] permissions.  Check with your Cumulus deployer to discover what types of credentials are dispensed by this endpoint.
 
 GET requests with a valid cookie to the endpoint return a credentials object that can be used to make direct S3 requests.  The easiest way to get a set of credentials is to visit the endpoint in a browser to handle authentication and redirects.  If you wish to use temporary credentals in AWS, you can find examples on the `/s3credentialsREADME` endpoint in both javascript and python.
 
@@ -234,3 +234,7 @@ For non-NGAP deployments that wish to provide temporary credentials, you must pr
  userid: username
 }
 ```
+
+[^ngap]: NASA-compliant General Application Platform
+[^cmr]: Common Metadata Repository
+[^acl]: Access Control List
