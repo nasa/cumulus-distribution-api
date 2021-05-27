@@ -1,6 +1,6 @@
 ## Versioning
 
-The Cumulus API is versioned and the current version is v1. Retrieve the latest API version from Cumulus.
+The Cumulus Distribution API is versioned and the current version is v1. Retrieve the latest API version from Cumulus.
 
 ```endpoint
 GET /version
