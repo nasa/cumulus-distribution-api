@@ -21,4 +21,7 @@ module.exports =
   fs.readFileSync('./content/s3credentials.md', 'utf8') + '\n' +
 
   '# S3 Access README\n' +
-  fs.readFileSync('./content/s3credentialsreadme.md', 'utf8') + '\n';
+  fs.readFileSync('./content/s3credentialsreadme.md', 'utf8') + '\n' +
+
+  '# Version\n' +
+  fs.readFileSync('./content/version.md', 'utf8') + '\n';
