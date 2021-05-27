@@ -14,6 +14,9 @@ module.exports =
   '# Introduction\n' +
   fs.readFileSync('./content/introduction.md', 'utf8') + '\n' +
 
+  '# Versioning\n' +
+  fs.readFileSync('./content/version.md', 'utf8') + '\n' +
+
   '# Data Access\n' +
   fs.readFileSync('./content/distribution.md', 'utf8') + '\n' +
 
