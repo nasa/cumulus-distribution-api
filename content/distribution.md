@@ -6,3 +6,7 @@ File downloads through the Cumulus Distribution API are available to the authent
 ```endpoint
 GET /some-protected-bucket/some-key
 ```
+
+```endpoint
+HEAD /path/to/science-file.hdf
+```
