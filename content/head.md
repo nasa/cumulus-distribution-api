@@ -32,4 +32,3 @@ Headers sent with the request will be passed to the HEAD S3 request
 | Range  | bytes=(min byte)-(max byte) | ```curl --location --head 'https://example.com/path/to/science-file.hdf' --header 'Range: bytes=0-1023' --header 'Cookie: accessToken=<access-token>'``` |
 
 The full list of supported headers can be found [here](https://docs.aws.amazon.com/AmazonS3/latest/API/API_HeadObject.html)
-diff --git a/content/distribution.md b/content/distribution.md
