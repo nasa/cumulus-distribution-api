@@ -168,5 +168,5 @@ Content-Length: 1098034
 ### Supported Headers
 Name | Value | Passed to HeadObject | Example Usage
 ---|---|---|---
-`Cookie` | (optional) bytes=(min byte)-(max byte) | `false` | `curl --location --head 'https://example.com/path/to/science-file.hdf' --header --header 'Cookie: accessToken=<access-token>'`
-`Range` | (optional) bytes=(min byte)-(max byte) | `true` | `curl --location --head 'https://example.com/path/to/science-file.hdf' --header 'Cookie: accessToken=<access-token>' --header 'Range: bytes=0-1023'`
+`Cookie` | (optional) bytes=(min byte)-(max byte) | `false` | `curl --request GET 'https://example.com/path/to/science-file.hdf' --header --header 'Cookie: accessToken=<access-token>'`
+`Range` | (optional) bytes=(min byte)-(max byte) | `true` | `curl --request GET 'https://example.com/path/to/science-file.hdf' --header 'Cookie: accessToken=<access-token>' --header 'Range: bytes=0-1023'`
