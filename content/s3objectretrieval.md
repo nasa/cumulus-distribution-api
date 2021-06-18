@@ -6,8 +6,8 @@ HEAD /path/to/science-file.hdf
 ```
 
 #### Example Request
-```http
-https://example.com/path/to/science-file.hdf
+```curl
+curl --location --head 'https://example.com/path/to/science-file.hdf'
 ```
 
 #### Example Response
