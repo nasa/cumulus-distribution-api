@@ -23,6 +23,9 @@ module.exports =
   '# Authentication\n' +
   fs.readFileSync('./content/auth.md', 'utf8') + '\n' +
 
+  '# Bucket Map\n' +
+  fs.readFileSync('./content/bucketmap.md', 'utf8') + '\n' +
+
   '# S3 Access\n' +
   fs.readFileSync('./content/s3credentials.md', 'utf8') + '\n' +
 
