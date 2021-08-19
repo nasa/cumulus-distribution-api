@@ -1,6 +1,8 @@
 ## Bucket Map
 
-The Cumulus Distribution API supports bucket map, and you can get bucket map paths for a given bucket.
+The Cumulus Distribution API supports an S3 bucket map. The `/locate` endpoint fetches bucket map paths for a given bucket.
+Information about S3 bucket map is available [here](https://nasa.github.io/cumulus/docs/deployment/cumulus_distribution#s3-bucket-mapping)
+
 
 ```
 GET /locate
@@ -18,5 +20,5 @@ $ curl https://example.com/locate?bucket_name={bucket}
 
 #### Example Response
 ```json
-["bucketpath1", "bucketpath2"]
+["/path1/to/bucket", "/path2/to/bucket"]
 ```
