@@ -28,7 +28,7 @@ https://example.com/s3credentials
 
 ## Command line credentials request
 
-### accessToken cookie
+### AccessToken
 
 In order to script the request for credentials you can provide an `accessToken` cookie in your curl request. This is how the distribution api determines if you are authenticated with Earthdata Login.  If no cookie is provided the authentication workflow is begun.  Here is a sample script to get credentials from the command line.
 
@@ -222,7 +222,7 @@ exports.handler = handler;
 
 ```
 
-### bearer token
+### Bearer token
 
 You can provide an EDL (earthdata login) bearer token in your curl request, and the distribution api determines if you are authenticated with Earthdata Login.  If no bearer token is provided the authentication workflow is begun.
 
