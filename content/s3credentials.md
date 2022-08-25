@@ -26,11 +26,13 @@ https://example.com/s3credentials
 }
 ```
 
-### Command line credentials request
+## Command line credentials request
 
-In order to script the request for credentials you must provide an `accessToken` cookie in your curl request. This is how the distribution api determines if you are authenticated with Earthdata Login.  If no cookie is provided the authentication workflow is begun.  Here is a sample script to get credentials from the command line.
+### accessToken cookie
 
-#### Sample script to recieve credentials.
+In order to script the request for credentials you can provide an `accessToken` cookie in your curl request. This is how the distribution api determines if you are authenticated with Earthdata Login.  If no cookie is provided the authentication workflow is begun.  Here is a sample script to get credentials from the command line.
+
+##### Sample script to recieve credentials.
 
 ```curl
 #! /bin/sh
@@ -220,8 +222,17 @@ exports.handler = handler;
 
 ```
 
+### bearer token
 
-### Non-NGAP deployments
+You can provide an EDL (earthdata login) bearer token in your curl request, and the distribution api determines if you are authenticated with Earthdata Login.  If no bearer token is provided the authentication workflow is begun.
+
+#### Example Request
+
+```curl
+$ curl https://example.com/s3credentials --header 'Authorization: Bearer ReplaceWithTheEDLToken'
+```
+
+## Non-NGAP deployments
 
 For non-NGAP deployments that wish to provide temporary credentials, you must provide the name of a lambda available to your stack either by overriding the default `sts_credentials_lambda` in your Cumulus deployment configuration or by setting the environment variable STSCredentialsLambda on your API.  Your lambda function must take an payload object as described below and return [AWS.Credentials](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/Credentials.html) appropriate to your use case probably via the [AWS Security Token Service](https://docs.aws.amazon.com/STS/latest/APIReference/Welcome.html).
 
